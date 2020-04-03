@@ -38,13 +38,7 @@ movies_meta_data = movies_meta_data[((movies_meta_data.loc[:,'budget'] > 0) & (m
 movies_meta_data = movies_meta_data[movies_meta_data['runtime'] > 0]
 # Calculate return of investment attributes
 movies_meta_data['return_on_investment'] = ((movies_meta_data['revenue'] - movies_meta_data['budget']) / movies_meta_data['budget'])
-# movies_meta_data = movies_meta_data.drop(columns=['revenue', 'budget'])
 
-# Remove the outliers using z-score
-movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.budget)) <= 3)]
-movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.revenue)) <= 3)]
-movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.return_on_investment)) <= 3)]
- 
 # Merge with the keywords and credits
 movies_meta_data = movies_meta_data.merge(keywords_data, left_on='id', right_on='id')
 movies_meta_data = movies_meta_data.merge(casts_data, left_on='id', right_on='id')
@@ -54,7 +48,7 @@ del(casts_data)
 del(crews_data)
 
 # Drop the unnecessary column
-movies_meta_data = movies_meta_data.drop(columns=['id','budget','revenue','vote_count'])
+movies_meta_data = movies_meta_data.drop(columns=['id','vote_count'])
 
 # Generate the new feature for genres, keywords, and cast
 genres_name_count_map = dict()
@@ -216,16 +210,19 @@ del(casts_name_avg_pop_map, casts_name_avg_vote_map)
 del(directors_name_avg_pop_map, directors_name_avg_vote_map)
 
 # Remove the outliers using z-score
-movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.genres_popularity)) <= 3)]
-movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.genres_vote)) <= 3)]
-movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.keywords_popularity)) <= 3)]
-movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.keywords_vote)) <= 3)]
-movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.casts_popularity)) <= 3)]
-movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.casts_vote)) <= 3)]
-movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.directors_popularity)) <= 3)]
-movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.directors_vote)) <= 3)]
+movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.genres_popularity_score)) <= 3)]
+movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.genres_vote_score)) <= 3)]
+movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.keywords_popularity_score)) <= 3)]
+movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.keywords_vote_score)) <= 3)]
+movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.casts_popularity_score)) <= 3)]
+movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.casts_vote_score)) <= 3)]
+movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.directors_popularity_score)) <= 3)]
+movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.directors_vote_score)) <= 3)]
+movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.budget)) <= 3)]
+movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.revenue)) <= 3)]
+movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.return_on_investment)) <= 3)]
 
-# movies_meta_data = movies_meta_data.drop(columns=['genres','keywords','cast','popularity','vote_average'])
+movies_meta_data = movies_meta_data.drop(columns=['budget','revenue'])
 movies_meta_data = movies_meta_data.drop(columns=['genres','keywords','cast','directors','overview','tagline','popularity','vote_average'])
 movies_meta_data.info()
 movies_meta_data.describe(include='all')
