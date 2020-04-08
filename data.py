@@ -1,4 +1,5 @@
 """
+This program is used for data preprocessing
 @author: tyeh3
 """
 # Press Command + Enter to execute
@@ -22,12 +23,12 @@ movies_meta_data = movies_meta_data.dropna(subset=['budget'])
 movies_meta_data = movies_meta_data.dropna(subset=['revenue'])
 movies_meta_data = movies_meta_data.replace(np.nan, '', regex=True)
 movies_meta_data = movies_meta_data.loc[:, ['budget', 'genres', 'id', 'overview', 'popularity', 'release_date', 'revenue', 'runtime', 'tagline', 'vote_average', 'vote_count']]
-movies_meta_data['budget'] = pd.to_numeric(movies_meta_data['budget'], downcast='unsigned', errors='coerce')
-movies_meta_data['vote_average'] = pd.to_numeric(movies_meta_data['vote_average'], downcast='unsigned', errors='coerce')
-movies_meta_data['vote_count'] = pd.to_numeric(movies_meta_data['vote_count'], downcast='unsigned', errors='coerce')
-movies_meta_data['revenue'] = pd.to_numeric(movies_meta_data['revenue'], downcast='unsigned', errors='coerce')
-movies_meta_data['runtime'] = pd.to_numeric(movies_meta_data['runtime'], downcast='unsigned', errors='coerce')
-movies_meta_data['revenue'] = pd.to_numeric(movies_meta_data['revenue'], downcast='unsigned', errors='coerce')
+movies_meta_data['budget'] = pd.to_numeric(movies_meta_data['budget'], errors='coerce')
+movies_meta_data['vote_average'] = pd.to_numeric(movies_meta_data['vote_average'], errors='coerce')
+movies_meta_data['vote_count'] = pd.to_numeric(movies_meta_data['vote_count'], errors='coerce')
+movies_meta_data['revenue'] = pd.to_numeric(movies_meta_data['revenue'], errors='coerce')
+movies_meta_data['runtime'] = pd.to_numeric(movies_meta_data['runtime'], errors='coerce')
+movies_meta_data['revenue'] = pd.to_numeric(movies_meta_data['revenue'], errors='coerce')
 movies_meta_data['id'] = pd.to_numeric(movies_meta_data['id'], downcast='unsigned')
 movies_meta_data['popularity'] = pd.to_numeric(movies_meta_data['popularity'])
 movies_meta_data['release_date']= pd.to_datetime(movies_meta_data['release_date'])
@@ -36,8 +37,10 @@ movies_meta_data['release_date']= pd.to_datetime(movies_meta_data['release_date'
 movies_meta_data = movies_meta_data[((movies_meta_data.loc[:,'budget'] > 0) & (movies_meta_data.loc[:,'revenue'] > 0))]
 # Remove the movie with runtime equals 0
 movies_meta_data = movies_meta_data[movies_meta_data['runtime'] > 0]
-# Calculate return of investment attributes
+# Calculate return on investment attributes
 movies_meta_data['return_on_investment'] = ((movies_meta_data['revenue'] - movies_meta_data['budget']) / movies_meta_data['budget'])
+# Remove movie with return on investment greater than 1000 based on historical data
+movies_meta_data = movies_meta_data[movies_meta_data['return_on_investment'] < 1000]
 
 # Merge with the keywords and credits
 movies_meta_data = movies_meta_data.merge(keywords_data, left_on='id', right_on='id')
@@ -222,7 +225,7 @@ movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.budget
 movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.revenue)) <= 3)]
 movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.return_on_investment)) <= 3)]
 
-movies_meta_data = movies_meta_data.drop(columns=['budget','revenue'])
+# movies_meta_data = movies_meta_data.drop(columns=['budget','revenue'])
 movies_meta_data = movies_meta_data.drop(columns=['genres','keywords','cast','directors','overview','tagline','popularity','vote_average'])
 movies_meta_data.info()
 movies_meta_data.describe(include='all')
