@@ -229,8 +229,14 @@ movies_meta_data = movies_meta_data.drop(columns=['budget','revenue'])
 movies_meta_data = movies_meta_data.drop(columns=['genres','keywords','cast','directors','overview','tagline','popularity','vote_average'])
 movies_meta_data.info()
 
+movies_meta_data['release_year'] = 0
+movies_meta_data['release_month'] = 0
+for i in movies_meta_data.index: 
+    movies_meta_data['release_year'][i] = movies_meta_data['release_date'][i].year
+    movies_meta_data['release_month'][i] = movies_meta_data['release_date'][i].month
+
 desc_all = movies_meta_data.describe(include='all')
 for d in desc_all:
     print()
     print("{}:\nmin={:.3f}\nmax={:.3f}\nmedian={:.3f}\nmean={:.3f}\nstd.dev={:.3f}".format(d, desc_all[d]['min'], desc_all[d]['max'], desc_all[d]['50%'], desc_all[d]['mean'], desc_all[d]['std']))
-del(d)
+del(d, i, release_date)

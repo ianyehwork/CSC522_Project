@@ -25,6 +25,7 @@ optimal_clusters = 4
 kmeans = KMeans(n_clusters = optimal_clusters, init = 'k-means++', random_state = 1)
 roi_cluster = kmeans.fit_predict(roi_pos)
 
+# Include the values with negative ROI in the graph
 plt.scatter(roi_pos[roi_cluster == 0, 0], np.zeros(np.count_nonzero(roi_cluster == 0)), s = 10, c = 'red', label = 'Very Low')
 plt.scatter(roi_pos[roi_cluster == 1, 0], np.zeros(np.count_nonzero(roi_cluster == 1)), s = 10, c = 'yellow', label = 'Low')
 plt.scatter(roi_pos[roi_cluster == 2, 0], np.zeros(np.count_nonzero(roi_cluster == 2)), s = 10, c = 'green', label = 'Medium')
@@ -38,4 +39,4 @@ plt.show()
 movies_meta_data['return_on_investment_label'] = -1
 movies_meta_data['return_on_investment_label'][roi_pos_df.index] = roi_cluster
 movies_meta_data['return_on_investment_label'] = movies_meta_data['return_on_investment_label'].map({-1: 0, 0: 1, 1: 2, 2: 3, 3: 4})
-del(i, optimal_clusters, roi_cluster,)
+del(i, optimal_clusters, roi_cluster, roi_pos_df, roi_pos, wcss)
