@@ -26,7 +26,7 @@ print(clf.score(X_test, y_test))
 
 dot_data = tree.export_graphviz(clf, out_file=None) 
 graph = graphviz.Source(dot_data) 
-graph.render("iris") 
+graph.render("movie_tree") 
 
 # Random Forest
 clf_random_forest = RandomForestClassifier().fit(X_train, y_train)
