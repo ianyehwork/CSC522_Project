@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 
 roi_pos_df = movies_meta_data[movies_meta_data['return_on_investment'] > 0]
 roi_pos = movies_meta_data[movies_meta_data['return_on_investment'] > 0]['return_on_investment'].values.reshape(-1, 1)
-roi_neg_df = movies_meta_data[movies_meta_data['return_on_investment'] <= 0]
 
 # Using the elbow method to find the optimal number of clusters
 wcss = []
@@ -35,3 +34,8 @@ plt.title('Clusters of movies')
 plt.xlabel('Ruturn on investment')
 plt.legend()
 plt.show()
+
+movies_meta_data['return_on_investment_label'] = -1
+movies_meta_data['return_on_investment_label'][roi_pos_df.index] = roi_cluster
+movies_meta_data['return_on_investment_label'] = movies_meta_data['return_on_investment_label'].map({-1: 0, 0: 1, 1: 2, 2: 3, 3: 4})
+del(i, optimal_clusters, roi_cluster,)

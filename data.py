@@ -225,7 +225,12 @@ movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.budget
 movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.revenue)) <= 3)]
 movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.return_on_investment)) <= 3)]
 
-# movies_meta_data = movies_meta_data.drop(columns=['budget','revenue'])
+movies_meta_data = movies_meta_data.drop(columns=['budget','revenue'])
 movies_meta_data = movies_meta_data.drop(columns=['genres','keywords','cast','directors','overview','tagline','popularity','vote_average'])
 movies_meta_data.info()
-movies_meta_data.describe(include='all')
+
+desc_all = movies_meta_data.describe(include='all')
+for d in desc_all:
+    print()
+    print("{}:\nmin={:.3f}\nmax={:.3f}\nmedian={:.3f}\nmean={:.3f}\nstd.dev={:.3f}".format(d, desc_all[d]['min'], desc_all[d]['max'], desc_all[d]['50%'], desc_all[d]['mean'], desc_all[d]['std']))
+del(d)
