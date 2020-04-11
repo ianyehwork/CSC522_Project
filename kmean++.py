@@ -39,4 +39,28 @@ plt.show()
 movies_meta_data['return_on_investment_label'] = -1
 movies_meta_data['return_on_investment_label'][roi_pos_df.index] = roi_cluster
 movies_meta_data['return_on_investment_label'] = movies_meta_data['return_on_investment_label'].map({-1: 0, 0: 1, 1: 2, 2: 3, 3: 4})
+
+#print level ranges
+print()
+print('level0')
+print('min: ' + str(min(movies_meta_data[movies_meta_data['return_on_investment_label'] == 0]['return_on_investment'])))
+print('max: ' + str(max(movies_meta_data[movies_meta_data['return_on_investment_label'] == 0]['return_on_investment'])))
+
+print('level1')
+print('min: ' + str(min(movies_meta_data[movies_meta_data['return_on_investment_label'] == 1]['return_on_investment'])))
+print('max: ' + str(max(movies_meta_data[movies_meta_data['return_on_investment_label'] == 1]['return_on_investment'])))
+
+print('level2')
+print('min: ' + str(min(movies_meta_data[movies_meta_data['return_on_investment_label'] == 2]['return_on_investment'])))
+print('max: ' + str(max(movies_meta_data[movies_meta_data['return_on_investment_label'] == 2]['return_on_investment'])))
+
+print('level3')
+print('min: ' + str(min(movies_meta_data[movies_meta_data['return_on_investment_label'] == 3]['return_on_investment'])))
+print('max: ' + str(max(movies_meta_data[movies_meta_data['return_on_investment_label'] == 3]['return_on_investment'])))
+
+print('level4')
+print('min: ' + str(min(movies_meta_data[movies_meta_data['return_on_investment_label'] == 4]['return_on_investment'])))
+print('max: ' + str(max(movies_meta_data[movies_meta_data['return_on_investment_label'] == 4]['return_on_investment'])))
+
+
 del(i, optimal_clusters, roi_cluster, roi_pos_df, roi_pos, wcss)
