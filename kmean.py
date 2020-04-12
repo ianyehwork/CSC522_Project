@@ -4,8 +4,11 @@ using kmean++ algorithm
 @author: tyeh3
 """
 from sklearn.cluster import KMeans
+import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
+movies_meta_data = pd.read_csv("movies_meta_data_after_preprocessing.csv")
 roi_pos_df = movies_meta_data[movies_meta_data['return_on_investment'] > 0]
 roi_pos = movies_meta_data[movies_meta_data['return_on_investment'] > 0]['return_on_investment'].values.reshape(-1, 1)
 
