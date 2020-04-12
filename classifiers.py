@@ -2,6 +2,7 @@ from kmean import movies_meta_data
 import pandas as pd
 import sklearn
 from sklearn import tree
+from sklearn import preprocessing
 from sklearn.ensemble import RandomForestClassifier
 import graphviz
 
@@ -12,13 +13,16 @@ import graphviz
 # levels = pd.qcut(movies_meta_data['return_on_investment'], 5, labels=['Very Low', 'Low', 'Average', 'High', 'Very High'])
 levels = movies_meta_data['return_on_investment_label']
 x_train = movies_meta_data.copy()
+del x_train['return_on_investment']
 del x_train['return_on_investment_label']
 
+# Normalization?
+X_scaled = preprocessing.scale(x_train)
 # Split the dataset into train/test with 2/3 being training data and 1/3 being testing data.
-X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(x_train, levels, shuffle=True)
+X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X_scaled, levels, shuffle=True)
 
 # Decision Tree
-clf = tree.DecisionTreeClassifier(max_depth=4, min_samples_split=15)
+clf = tree.DecisionTreeClassifier(max_depth=8, min_samples_split=15)
 clf = clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 
