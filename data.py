@@ -234,6 +234,7 @@ movies_meta_data['release_month'] = 0
 for i in movies_meta_data.index: 
     movies_meta_data['release_year'][i] = movies_meta_data['release_date'][i].year
     movies_meta_data['release_month'][i] = movies_meta_data['release_date'][i].month
+movies_meta_data = movies_meta_data.drop(columns=['release_date'])
 
 # desc_all = movies_meta_data.describe(include='all')
 # for d in desc_all:
@@ -243,3 +244,4 @@ for i in movies_meta_data.index:
 del movies_meta_data['release_date']
 
 movies_meta_data.to_csv("movies_meta_data_after_preprocessing.csv")
+del(d, i, desc_all)

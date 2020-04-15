@@ -65,4 +65,3 @@ movies_meta_data['return_on_investment_label'] = movies_meta_data['return_on_inv
 # print('level4')
 # print('min: ' + str(min(movies_meta_data[movies_meta_data['return_on_investment_label'] == 4]['return_on_investment'])))
 # print('max: ' + str(max(movies_meta_data[movies_meta_data['return_on_investment_label'] == 4]['return_on_investment'])))
-
