@@ -66,4 +66,5 @@ print('min: ' + str(min(movies_meta_data[movies_meta_data['return_on_investment_
 print('max: ' + str(max(movies_meta_data[movies_meta_data['return_on_investment_label'] == 4]['return_on_investment'])))
 
 
+movies_meta_data = movies_meta_data.drop(columns=['return_on_investment'])
 del(i, optimal_clusters, roi_cluster, roi_pos_df, roi_pos, wcss)
