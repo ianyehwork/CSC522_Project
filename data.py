@@ -241,7 +241,6 @@ movies_meta_data = movies_meta_data.drop(columns=['release_date'])
 #     print()
 #     print("{}:\nmin={:.3f}\nmax={:.3f}\nmedian={:.3f}\nmean={:.3f}\nstd.dev={:.3f}".format(d, desc_all[d]['min'], desc_all[d]['max'], desc_all[d]['50%'], desc_all[d]['mean'], desc_all[d]['std']))
 # # del(d, i, release_date)
-del movies_meta_data['release_date']
 
 movies_meta_data.to_csv("movies_meta_data_after_preprocessing.csv")
-del(d, i, desc_all)
+
