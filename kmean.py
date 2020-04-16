@@ -5,7 +5,10 @@ using kmean++ algorithm
 """
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
+movies_meta_data = pd.read_csv('data/movies_meta_data_after_processing.csv')
 roi_pos_df = movies_meta_data[movies_meta_data['return_on_investment'] > 0]
 roi_pos = movies_meta_data[movies_meta_data['return_on_investment'] > 0]['return_on_investment'].values.reshape(-1, 1)
 
@@ -21,7 +24,7 @@ plt.ylabel('WCSS')
 plt.show()
 
 # Fitting K-Means to the dataset
-optimal_clusters = 4
+optimal_clusters = 3
 kmeans = KMeans(n_clusters = optimal_clusters, init = 'k-means++', random_state = 1)
 roi_cluster = kmeans.fit_predict(roi_pos)
 
@@ -34,8 +37,12 @@ plt.title('Clusters of movies')
 plt.xlabel('Ruturn on investment')
 plt.legend()
 plt.show()
-
+unique, counts = np.unique(roi_cluster, return_counts=True)
+dict(zip(unique, counts))
 movies_meta_data['return_on_investment_label'] = -1
 movies_meta_data['return_on_investment_label'][roi_pos_df.index] = roi_cluster
+movies_meta_data['return_on_investment_label'].value_counts()
 movies_meta_data['return_on_investment_label'] = movies_meta_data['return_on_investment_label'].map({-1: 0, 0: 1, 1: 2, 2: 3, 3: 4})
 del(i, optimal_clusters, roi_cluster,)
+movies_meta_data['return_on_investment_label'].value_counts()
+movies_meta_data.to_csv('data/movies_meta_data_after_processing_with_4_cluster_label.csv')

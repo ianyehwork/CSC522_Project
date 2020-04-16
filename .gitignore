@@ -1,0 +1,8 @@
+/data/return_on_investment.csv
+/data/movies_meta_data_after_processing_with_4_cluster_label.csv
+/data/movies_meta_data_after_processing_percentile_label.csv
+/data/movies_meta_data_after_processing.csv
+/data/movies_meta_data_after_processing_with_3_cluster_label.csv
+/data/movies_meta_data_after_processing_with_label.csv
+
+__pycache__/

@@ -17,7 +17,6 @@ crews_data = pd.read_csv('data/crews.csv')
 casts_data = pd.read_csv('data/casts.csv')
 keywords_data = pd.read_csv('data/keywords.csv')
 movies_meta_data = pd.read_csv('data/movies_metadata.csv')
-
 # Select the movie data that is useful
 movies_meta_data = movies_meta_data.dropna(subset=['budget'])
 movies_meta_data = movies_meta_data.dropna(subset=['revenue'])
@@ -39,9 +38,13 @@ movies_meta_data = movies_meta_data[((movies_meta_data.loc[:,'budget'] > 0) & (m
 movies_meta_data = movies_meta_data[movies_meta_data['runtime'] > 0]
 # Calculate return on investment attributes
 movies_meta_data['return_on_investment'] = ((movies_meta_data['revenue'] - movies_meta_data['budget']) / movies_meta_data['budget'])
+
+return_on_investment = movies_meta_data['return_on_investment']
+return_on_investment.to_csv('data/return_on_investment.csv')
+
+#Before remove: 5369, after remove: 5357
 # Remove movie with return on investment greater than 1000 based on historical data
 movies_meta_data = movies_meta_data[movies_meta_data['return_on_investment'] < 1000]
-
 # Merge with the keywords and credits
 movies_meta_data = movies_meta_data.merge(keywords_data, left_on='id', right_on='id')
 movies_meta_data = movies_meta_data.merge(casts_data, left_on='id', right_on='id')
@@ -49,7 +52,7 @@ movies_meta_data = movies_meta_data.merge(crews_data, left_on='id', right_on='id
 del(keywords_data)
 del(casts_data)
 del(crews_data)
-
+movies_meta_data
 # Drop the unnecessary column
 movies_meta_data = movies_meta_data.drop(columns=['id','vote_count'])
 
@@ -225,12 +228,16 @@ movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.budget
 movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.revenue)) <= 3)]
 movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.return_on_investment)) <= 3)]
 
-movies_meta_data = movies_meta_data.drop(columns=['budget','revenue'])
+movies_meta_data = movies_meta_data.drop(columns=['revenue'])
+# movies_meta_data = movies_meta_data.drop(columns=['budget','revenue'])
 movies_meta_data = movies_meta_data.drop(columns=['genres','keywords','cast','directors','overview','tagline','popularity','vote_average'])
 movies_meta_data.info()
+movies_meta_data.isnull().sum()
 
 desc_all = movies_meta_data.describe(include='all')
 for d in desc_all:
     print()
     print("{}:\nmin={:.3f}\nmax={:.3f}\nmedian={:.3f}\nmean={:.3f}\nstd.dev={:.3f}".format(d, desc_all[d]['min'], desc_all[d]['max'], desc_all[d]['50%'], desc_all[d]['mean'], desc_all[d]['std']))
 del(d)
+
+movies_meta_data.to_csv('data/movies_meta_data_after_processing.csv')
