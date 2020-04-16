@@ -5,6 +5,7 @@ from sklearn import tree
 from sklearn import preprocessing
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import MinMaxScaler
 import graphviz
 
 # Read in the movies_meta_data from csv
@@ -16,13 +17,15 @@ levels = movies_meta_data['return_on_investment_label']
 x_train = movies_meta_data.copy()
 del x_train['return_on_investment']
 del x_train['return_on_investment_label']
-del x_train['Unnamed: 0']
-
-# Normalization?
-# X_scaled = preprocessing.scale(x_train)
 
 # Split the dataset into train/test with 2/3 being training data and 1/3 being testing data.
 X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(x_train, levels, shuffle=True, test_size=0.2)
+
+# Normalization
+# scaler = MinMaxScaler()
+# X_train = scaler.fit_transform(X_train)
+# X_test = scaler.transform(X_test)
+# Conclusion: Normalization does not improve the accuracy for DT and RF
 
 # Decision Tree
 clf = tree.DecisionTreeClassifier(max_depth=8, min_samples_split=15)
@@ -48,4 +51,3 @@ print(clf_random_forest.score(X_test, y_test))
 
 print("Accuracy of Decision Tree classifier after cross validation: ")
 print(cross_val_score(clf_random_forest, x_train, levels, cv=10))
-
