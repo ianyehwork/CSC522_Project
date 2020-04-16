@@ -28,7 +28,7 @@ def create_label_by_percentile(dataframe, chosen_column_name ,new_column_name, p
                                    bins=percentile_value,
                                    labels=percentile_label)
     path = "data/movies_meta_data_after_processing_percentile_" + str(percentile_number) + "_label.csv"
-    data.to_csv(path)
+    data.to_csv(path, index=False)
     return data
 
 def create_label_by_eqaul_range(dataframe, chosen_column_name ,new_column_name, equal_range_number):
@@ -36,10 +36,10 @@ def create_label_by_eqaul_range(dataframe, chosen_column_name ,new_column_name, 
     data[new_column_name] = pd.cut(data[chosen_column_name], equal_range_number, precision=2)
     data[new_column_name] = data[new_column_name].astype(str)
     path = "data/movies_meta_data_after_processing_equal_range_" + str(equal_range_number) + "_label.csv"
-    data.to_csv(path)
+    data.to_csv(path, index=False)
     return data
 
-movies_processed = pd.read_csv('data/movies_meta_data_after_processing.csv')
+movies_processed = pd.read_csv('data/movies_meta_data_after_preprocessing.csv')
 
 test_percentile_4=create_label_by_percentile(movies_processed, 'return_on_investment', 'return_on_investment_label',4)
 test_percentile_3=create_label_by_percentile(movies_processed, 'return_on_investment', 'return_on_investment_label',3)
