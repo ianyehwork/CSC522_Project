@@ -130,11 +130,12 @@ for c in casts_name_count_map:
 for d in directors_name_count_map:
     directors_name_avg_pop_map.setdefault(d, directors_name_total_pop_map.get(d) / directors_name_count_map.get(d))
     directors_name_avg_vote_map.setdefault(d, directors_name_total_vote_map.get(d) / directors_name_count_map.get(d))
-del(i, g, k, c, d)
-del(genres_name_count_map, genres_name_total_pop_map, genres_name_total_vote_map)
-del(keywords_name_count_map, keywords_name_total_pop_map, keywords_name_total_vote_map)
-del(casts_name_count_map, casts_name_total_pop_map, casts_name_total_vote_map)
-del(directors_name_count_map, directors_name_total_pop_map, directors_name_total_vote_map)
+
+# del(i, g, k, c, d)
+# del(genres_name_count_map, genres_name_total_pop_map, genres_name_total_vote_map)
+# del(keywords_name_count_map, keywords_name_total_pop_map, keywords_name_total_vote_map)
+# del(casts_name_count_map, casts_name_total_pop_map, casts_name_total_vote_map)
+# del(directors_name_count_map, directors_name_total_pop_map, directors_name_total_vote_map)
 
 movies_meta_data['genres_popularity_score'] = 0.0
 movies_meta_data['genres_vote_score'] = 0.0
@@ -176,19 +177,18 @@ for i in movies_meta_data.index:
         movies_meta_data['keywords_vote_score'][i] = k_vote_sum / k_count
     
     # casts
-    c_pop_sum = 0
-    c_vote_sum = 0
-    c_count = 0
+    cast_pop_for_a_certain_movie = []
+    cast_vote_for_a_certain_movie = []
+    
     for c in movies_meta_data['cast'][i]:
-        c_pop_sum = c_pop_sum + casts_name_avg_pop_map.get(c)
-        c_vote_sum = c_vote_sum + casts_name_avg_vote_map.get(c)
-        c_count = c_count + 1 
-    if c_count == 0:
-        movies_meta_data['casts_popularity_score'][i] = 0
-        movies_meta_data['casts_vote_score'][i] = 0
-    else:
-        movies_meta_data['casts_popularity_score'][i] = c_pop_sum / c_count
-        movies_meta_data['casts_vote_score'][i] = c_vote_sum / c_count
+        # c is the actor name
+        cast_pop_for_a_certain_movie.append(casts_name_avg_pop_map.get(c))
+        cast_vote_for_a_certain_movie.append(casts_name_avg_vote_map.get(c))
+
+        top3casts_pop_sum = sum(sorted(cast_pop_for_a_certain_movie, reverse=True)[:3])
+        top3casts_vote_sum = sum(sorted(cast_vote_for_a_certain_movie, reverse=True)[:3])
+        movies_meta_data['casts_popularity_score'][i] = top3casts_pop_sum
+        movies_meta_data['casts_vote_score'][i] = top3casts_vote_sum
     
     # directors
     d_pop_sum = 0
@@ -205,15 +205,15 @@ for i in movies_meta_data.index:
         movies_meta_data['directors_popularity_score'][i] = d_pop_sum / d_count
         movies_meta_data['directors_vote_score'][i] = d_vote_sum / d_count
 
-del(i)
-del(c, c_count, c_pop_sum, c_vote_sum)
-del(g, g_count, g_pop_sum, g_vote_sum)
-del(k, k_count, k_pop_sum, k_vote_sum)
-del(d, d_count, d_pop_sum, d_vote_sum)
-del(genres_name_avg_pop_map, genres_name_avg_vote_map)
-del(keywords_name_avg_pop_map, keywords_name_avg_vote_map)
-del(casts_name_avg_pop_map, casts_name_avg_vote_map)
-del(directors_name_avg_pop_map, directors_name_avg_vote_map)
+# del(i)
+# del(c, c_count, c_pop_sum, c_vote_sum)
+# del(g, g_count, g_pop_sum, g_vote_sum)
+# del(k, k_count, k_pop_sum, k_vote_sum)
+# del(d, d_count, d_pop_sum, d_vote_sum)
+# del(genres_name_avg_pop_map, genres_name_avg_vote_map)
+# del(keywords_name_avg_pop_map, keywords_name_avg_vote_map)
+# del(casts_name_avg_pop_map, casts_name_avg_vote_map)
+# del(directors_name_avg_pop_map, directors_name_avg_vote_map)
 
 # Remove the outliers using z-score
 movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.genres_popularity_score)) <= 3)]
@@ -229,15 +229,20 @@ movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.revenu
 movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.return_on_investment)) <= 3)]
 
 movies_meta_data = movies_meta_data.drop(columns=['revenue'])
-# movies_meta_data = movies_meta_data.drop(columns=['budget','revenue'])
 movies_meta_data = movies_meta_data.drop(columns=['genres','keywords','cast','directors','overview','tagline','popularity','vote_average'])
 movies_meta_data.info()
-movies_meta_data.isnull().sum()
 
-desc_all = movies_meta_data.describe(include='all')
-for d in desc_all:
-    print()
-    print("{}:\nmin={:.3f}\nmax={:.3f}\nmedian={:.3f}\nmean={:.3f}\nstd.dev={:.3f}".format(d, desc_all[d]['min'], desc_all[d]['max'], desc_all[d]['50%'], desc_all[d]['mean'], desc_all[d]['std']))
-del(d)
+movies_meta_data['release_year'] = 0
+movies_meta_data['release_month'] = 0
+for i in movies_meta_data.index: 
+    movies_meta_data['release_year'][i] = movies_meta_data['release_date'][i].year
+    movies_meta_data['release_month'][i] = movies_meta_data['release_date'][i].month
+movies_meta_data = movies_meta_data.drop(columns=['release_date'])
 
-movies_meta_data.to_csv('data/movies_meta_data_after_processing.csv')
+# desc_all = movies_meta_data.describe(include='all')
+# for d in desc_all:
+#     print()
+#     print("{}:\nmin={:.3f}\nmax={:.3f}\nmedian={:.3f}\nmean={:.3f}\nstd.dev={:.3f}".format(d, desc_all[d]['min'], desc_all[d]['max'], desc_all[d]['50%'], desc_all[d]['mean'], desc_all[d]['std']))
+# # del(d, i, release_date)
+
+movies_meta_data.to_csv("movies_meta_data_after_preprocessing.csv")

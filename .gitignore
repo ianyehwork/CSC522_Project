@@ -6,3 +6,6 @@
 /data/movies_meta_data_after_processing_with_label.csv
 
 __pycache__/
+.idea/
+.idea/modules.xml
+.idea/misc.xml
