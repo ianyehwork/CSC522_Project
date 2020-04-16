@@ -18,14 +18,14 @@ def histogram(column_dataframe, bins=10, density=0):
     plt.xlabel(column_name)
     plt.ylabel("Count")
     plt.title("histogram")
-    path = 'data/histogram_'+ column_dataframe.name + '.png'
+    path = 'graph/histogram_'+ column_dataframe.name + '.png'
     plt.savefig(path)
     plt.show()
 
 def boxplot(column_dataframe):
     plt.boxplot(column_dataframe)
     plt.title('Rectangular box plot')
-    path = 'data/boxplot_' + column_dataframe.name + '.png'
+    path = 'graph/boxplot_' + column_dataframe.name + '.png'
     label = column_dataframe.name
     plt.xlabel(label)
     plt.savefig(path)
@@ -36,7 +36,7 @@ def pearson_correlation(dataframe):
     pearsoncorr = dataframe.corr(method='pearson')
     plt.subplots(figsize=(20, 20))
     sns.heatmap(pearsoncorr, annot=True, vmax=1, square=True, cmap="Blues")
-    plt.savefig('data/pearson_correlation.png')
+    plt.savefig('graph/pearson_correlation.png')
     plt.show()
 
 
