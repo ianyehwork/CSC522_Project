@@ -39,9 +39,6 @@ movies_meta_data = movies_meta_data[movies_meta_data['runtime'] > 0]
 # Calculate return on investment attributes
 movies_meta_data['return_on_investment'] = ((movies_meta_data['revenue'] - movies_meta_data['budget']) / movies_meta_data['budget'])
 
-return_on_investment = movies_meta_data['return_on_investment']
-return_on_investment.to_csv('data/return_on_investment.csv')
-
 #Before remove: 5369, after remove: 5357
 # Remove movie with return on investment greater than 1000 based on historical data
 movies_meta_data = movies_meta_data[movies_meta_data['return_on_investment'] < 1000]
@@ -52,7 +49,6 @@ movies_meta_data = movies_meta_data.merge(crews_data, left_on='id', right_on='id
 del(keywords_data)
 del(casts_data)
 del(crews_data)
-movies_meta_data
 # Drop the unnecessary column
 movies_meta_data = movies_meta_data.drop(columns=['id','vote_count'])
 
