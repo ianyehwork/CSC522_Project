@@ -75,6 +75,8 @@ del(kws)
 casts_name_count_map = dict()
 casts_name_total_pop_map = dict()
 casts_name_total_vote_map = dict()
+casts_name_total_roi_map = dict()
+
 for cast in [eval(casts) for casts in movies_meta_data['cast']]:
     for c in cast:
         casts_name_count_map.update({c['name']: casts_name_count_map.get(c['name'], 0) + 1})
@@ -84,6 +86,8 @@ del(cast)
 directors_name_count_map = dict()
 directors_name_total_pop_map = dict()
 directors_name_total_vote_map = dict()
+directors_name_total_roi_map = dict()
+
 for crew in [eval(crews) for crews in movies_meta_data['crew']]:
     for c in crew:
         if c['job'] == 'Director':
@@ -102,9 +106,12 @@ for i in movies_meta_data.index:
      for c in movies_meta_data['cast'][i]:
          casts_name_total_pop_map.update({c: casts_name_total_pop_map.get(c, 0) + movies_meta_data['popularity'][i]})
          casts_name_total_vote_map.update({c: casts_name_total_vote_map.get(c, 0) + movies_meta_data['vote_average'][i]})
+         casts_name_total_roi_map.update({c: casts_name_total_roi_map.get(c, 0) + movies_meta_data['return_on_investment'][i]})
+
      for d in movies_meta_data['directors'][i]:
          directors_name_total_pop_map.update({d: directors_name_total_pop_map.get(d, 0) + movies_meta_data['popularity'][i]})
          directors_name_total_vote_map.update({d: directors_name_total_vote_map.get(d, 0) + movies_meta_data['vote_average'][i]})
+         directors_name_total_roi_map.update({d: directors_name_total_roi_map.get(d, 0) + movies_meta_data['return_on_investment'][i]})
 
 genres_name_avg_pop_map = dict()
 genres_name_avg_vote_map = dict()
@@ -114,6 +121,10 @@ casts_name_avg_pop_map = dict()
 casts_name_avg_vote_map = dict()
 directors_name_avg_pop_map = dict()
 directors_name_avg_vote_map = dict()
+
+casts_name_avg_roi_map = dict()
+directors_name_avg_roi_map = dict()
+
 for g in genres_name_count_map:
     genres_name_avg_pop_map.setdefault(g, genres_name_total_pop_map.get(g) / genres_name_count_map.get(g))
     genres_name_avg_vote_map.setdefault(g, genres_name_total_vote_map.get(g) / genres_name_count_map.get(g))
@@ -123,10 +134,11 @@ for k in keywords_name_count_map:
 for c in casts_name_count_map:
     casts_name_avg_pop_map.setdefault(c, casts_name_total_pop_map.get(c) / casts_name_count_map.get(c))
     casts_name_avg_vote_map.setdefault(c, casts_name_total_vote_map.get(c) / casts_name_count_map.get(c))
+    casts_name_avg_roi_map.setdefault(c, casts_name_total_roi_map.get(c) / casts_name_count_map.get(c))
 for d in directors_name_count_map:
     directors_name_avg_pop_map.setdefault(d, directors_name_total_pop_map.get(d) / directors_name_count_map.get(d))
     directors_name_avg_vote_map.setdefault(d, directors_name_total_vote_map.get(d) / directors_name_count_map.get(d))
-
+    directors_name_avg_roi_map.setdefault(d, directors_name_total_roi_map.get(d) / directors_name_count_map.get(d))
 # del(i, g, k, c, d)
 # del(genres_name_count_map, genres_name_total_pop_map, genres_name_total_vote_map)
 # del(keywords_name_count_map, keywords_name_total_pop_map, keywords_name_total_vote_map)
@@ -141,6 +153,10 @@ movies_meta_data['casts_popularity_score'] = 0.0
 movies_meta_data['casts_vote_score'] = 0.0
 movies_meta_data['directors_popularity_score'] = 0.0
 movies_meta_data['directors_vote_score'] = 0.0
+
+movies_meta_data['casts_roi_score'] = 0.0
+movies_meta_data['directors_roi_score'] = 0.0
+
 for i in movies_meta_data.index: 
     # genres
     g_pop_sum = 0
@@ -175,32 +191,41 @@ for i in movies_meta_data.index:
     # casts
     cast_pop_for_a_certain_movie = []
     cast_vote_for_a_certain_movie = []
-    
+    cast_roi_for_a_certain_movie = []
+
     for c in movies_meta_data['cast'][i]:
         # c is the actor name
         cast_pop_for_a_certain_movie.append(casts_name_avg_pop_map.get(c))
         cast_vote_for_a_certain_movie.append(casts_name_avg_vote_map.get(c))
+        cast_roi_for_a_certain_movie.append(casts_name_avg_roi_map.get(c))
 
         top3casts_pop_sum = sum(sorted(cast_pop_for_a_certain_movie, reverse=True)[:3])
         top3casts_vote_sum = sum(sorted(cast_vote_for_a_certain_movie, reverse=True)[:3])
+        top3casts_roi_sum = sum(sorted(cast_roi_for_a_certain_movie, reverse=True)[:3])
+
         movies_meta_data['casts_popularity_score'][i] = top3casts_pop_sum
         movies_meta_data['casts_vote_score'][i] = top3casts_vote_sum
+        movies_meta_data['casts_roi_score'][i] = top3casts_roi_sum
     
     # directors
     d_pop_sum = 0
     d_vote_sum = 0
+    d_roi_sum = 0
     d_count = 0
     for d in movies_meta_data['directors'][i]:
         d_pop_sum = d_pop_sum + directors_name_avg_pop_map.get(d)
         d_vote_sum = d_vote_sum + directors_name_avg_vote_map.get(d)
+        d_roi_sum += directors_name_avg_roi_map.get(d)
         d_count = d_count + 1 
     if d_count == 0:
         movies_meta_data['directors_popularity_score'][i] = 0
         movies_meta_data['directors_vote_score'][i] = 0
+        movies_meta_data['directors_roi_score'][i] = 0
     else:
         movies_meta_data['directors_popularity_score'][i] = d_pop_sum / d_count
         movies_meta_data['directors_vote_score'][i] = d_vote_sum / d_count
-
+        movies_meta_data['directors_roi_score'][i] = d_roi_sum / d_count
+    
 # del(i)
 # del(c, c_count, c_pop_sum, c_vote_sum)
 # del(g, g_count, g_pop_sum, g_vote_sum)
