@@ -59,7 +59,8 @@ movies_processed_three_percentile_label.return_on_investment_label.value_counts(
 k_range = range(1,31)
 k_fold = 10
 #f1 maybe better for unbalanced data
-model_evaluation = "accuracy"
+#accuracy
+model_evaluation = "precision_macro"
 #all features
 cv_knn(movies_processed_three_percentile_label, k_range, k_fold, model_evaluation)
 cv_knn(movies_processed_four_percentile_label, k_range, k_fold, model_evaluation)
