@@ -15,8 +15,8 @@ p_dataset = pd.read_csv('data/movies_meta_data_after_processing_percentile_4_lab
 
 
 def dt_all_attributes(dataset):
-	X = dataset.iloc[:, 0:11]
-	y = dataset.iloc[:, 12].values
+	X = dataset.iloc[:, 0:13]
+	y = dataset.iloc[:, -1].values
 
 	# Create training and testing dataset
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, shuffle=True, random_state = 0)
@@ -32,8 +32,8 @@ def dt_all_attributes(dataset):
 	# print("Accuracy: %0.2f (+/- %0.2f)" % (cv_score.mean(), cv_score.std() * 2))
 
 def dt_selected_attributes(dataset):
-	X = dataset.loc[:, ['casts_vote_score', 'keywords_vote_score', 'keywords_popularity_score', 'directors_vote_score', 'directors_popularity_score']]
-	y = dataset.iloc[:, 12].values
+	X = dataset.loc[:, ['casts_vote_score', 'keywords_vote_score', 'keywords_popularity_score', 'directors_vote_score', 'directors_popularity_score', 'casts_roi_score', 'directors_roi_score']]
+	y = dataset.iloc[:, -1].values
 
 	# Create training and testing dataset
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, shuffle=True, random_state = 0)

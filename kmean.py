@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-movies_meta_data = pd.read_csv('data/movies_meta_data_after_preprocessing.csv')
+movies_meta_data = pd.read_csv('data/movies_meta_data_after_processing.csv')
 
 def create_label_cluster(movies_meta_data): 
     roi_pos = movies_meta_data['return_on_investment'].values.reshape(-1, 1)

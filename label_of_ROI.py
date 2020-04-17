@@ -39,7 +39,7 @@ def create_label_by_eqaul_range(dataframe, chosen_column_name ,new_column_name, 
     data.to_csv(path, index=False)
     return data
 
-movies_processed = pd.read_csv('data/movies_meta_data_after_preprocessing.csv')
+movies_processed = pd.read_csv('data/movies_meta_data_after_processing.csv')
 
 test_percentile_4=create_label_by_percentile(movies_processed, 'return_on_investment', 'return_on_investment_label',4)
 test_percentile_3=create_label_by_percentile(movies_processed, 'return_on_investment', 'return_on_investment_label',3)
