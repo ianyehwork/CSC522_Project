@@ -10,12 +10,17 @@ import pandas as pd
 import numpy as np
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
+from sklearn.ensemble import ExtraTreesClassifier
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import MinMaxScaler
 
 data = pd.read_csv('data/movies_meta_data_after_processing_with_4_cluster_label.csv')
 data = data.drop(columns=['return_on_investment'])
 
-X = data.iloc[:,0:12]  #independent columns
+X = data.iloc[:,0:10]  #independent columns
 y = data.iloc[:,-1]    #target column i.e price range
+
 #apply SelectKBest class to extract top 10 best features
 bestfeatures = SelectKBest(score_func=chi2, k=10)
 fit = bestfeatures.fit(X,y)
