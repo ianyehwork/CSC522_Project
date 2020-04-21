@@ -10,18 +10,16 @@ from sklearn.model_selection import cross_val_score
 import graphviz
 
 dataset = pd.read_csv('data/movies_meta_data_after_processing_with_4_cluster_label.csv').drop(columns=['return_on_investment'])
-
-e_dataset = pd.read_csv('data/movies_meta_data_after_processing_equal_range_4_label.csv').drop(columns=['return_on_investment'])
 p_dataset = pd.read_csv('data/movies_meta_data_after_processing_percentile_4_label.csv').drop(columns=['return_on_investment'])
 
 
 def dt_all_attributes(dataset):
-	X = dataset.iloc[:, 0:13]
+	X = dataset.iloc[:, 0:-3]
 	y = dataset.iloc[:, -1].values
 
 	# Create training and testing dataset
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.1, shuffle=True, random_state = 0)
-
+	X_test.drop(columns=['genres_roi_score', 'keywords_roi_score', 'casts_roi_score', 'directors_roi_score'])
 	# cv_scores = []
 	# for i in range(2, 100):
 	# 	dt = tree.DecisionTreeClassifier(criterion='entropy',  max_depth=5, min_samples_split = i)
@@ -66,9 +64,4 @@ dt_selected_attributes(dataset)
 print("Percentile labels")
 dt_all_attributes(p_dataset)
 dt_selected_attributes(p_dataset)
-
-print("Equal range labels")
-dt_all_attributes(e_dataset)
-dt_selected_attributes(e_dataset)
-
 
