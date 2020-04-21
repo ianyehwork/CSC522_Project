@@ -14,11 +14,11 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
 
 #use iteration to caclulator different k in models, then return the average accuracy based on the cross validation
-def cv_knn(dateframe, k_range, cv_times, model_evaluation, feature_number=9):
+def cv_knn(dateframe, k_range, cv_times, model_evaluation, feature_number=10):
     k_scores = []
     feature_array = ['budget','directors_popularity_score', 'casts_popularity_score', 'runtime', 'keywords_popularity_score', 'release_year', 'casts_vote_score', 'release_month', 'directors_vote_score', 'keywords_vote_score']
-    if feature_number == 9:
-        knn_attrbiutes = dateframe.loc[:,['budget','genres_popularity_score', 'genres_vote_score', 'keywords_popularity_score','keywords_vote_score', 'casts_popularity_score', 'casts_vote_score', 'directors_popularity_score','directors_vote_score']]
+    if feature_number == 10:
+        knn_attrbiutes = dateframe.loc[:,['budget', 'genres_popularity_score', 'genres_vote_score', 'keywords_popularity_score','keywords_vote_score', 'casts_popularity_score', 'casts_vote_score', 'directors_popularity_score','directors_vote_score']]
     else:
         feature_choose = feature_array[0:feature_number]
         knn_attrbiutes = dateframe.loc[:,feature_choose]
@@ -56,11 +56,11 @@ movies_processed_four_cluster_label['return_on_investment_label'].value_counts()
 
 movies_processed_three_percentile_label.return_on_investment_label.value_counts()
 #set the range of k
-k_range = range(1,31)
-k_fold = 10
+k_range = range(1,13)
+k_fold = 31
 #f1 maybe better for unbalanced data
-#accuracy
-model_evaluation = "precision_macro"
+#accuracy, precision_macro
+model_evaluation = "accuracy"#
 #all features
 cv_knn(movies_processed_three_percentile_label, k_range, k_fold, model_evaluation)
 cv_knn(movies_processed_four_percentile_label, k_range, k_fold, model_evaluation)
@@ -71,11 +71,11 @@ cv_knn(movies_processed_four_cluster_label, k_range, k_fold, model_evaluation)
 
 #first three features
 cv_knn(movies_processed_three_percentile_label, k_range, k_fold, model_evaluation, 3)
-cv_knn(movies_processed_four_percentile_label, k_range, k_fold, model_evaluation, 3)
+cv_knn(movies_processed_four_percentile_label, k_range, k_fold, model_evaluation, 5)
 cv_knn(movies_processed_three_equal_range, k_range, k_fold, model_evaluation, 3)
-cv_knn(movies_processed_four_equal_range, k_range, k_fold, model_evaluation, 3)
-cv_knn(movies_processed_three_cluster_label, k_range, k_fold, model_evaluation, 3)
-cv_knn(movies_processed_four_cluster_label, k_range, k_fold, model_evaluation, 3)
+cv_knn(movies_processed_four_equal_range, k_range, k_fold, model_evaluation, 5)
+cv_knn(movies_processed_three_cluster_label, k_range, k_fold, model_evaluation, 4)
+cv_knn(movies_processed_four_cluster_label, k_range, k_fold, model_evaluation, 5)
 
 #load dataset
 k_range = range(1,31)
