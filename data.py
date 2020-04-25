@@ -267,7 +267,9 @@ movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.revenu
 movies_meta_data = movies_meta_data[(np.abs(stats.zscore(movies_meta_data.return_on_investment)) <= 3)]
 
 movies_meta_data = movies_meta_data.drop(columns=['revenue'])
-movies_meta_data = movies_meta_data.drop(columns=['genres','keywords','cast','directors','overview','tagline','popularity','vote_average'])
+#movies_meta_data = movies_meta_data.drop(columns=['genres','keywords','cast','directors','overview','tagline','popularity','vote_average'])
+movies_meta_data = movies_meta_data.drop(columns=['genres','keywords','cast','directors','overview','tagline'])
+
 movies_meta_data.info()
 
 movies_meta_data['release_year'] = 0
